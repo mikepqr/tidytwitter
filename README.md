@@ -32,8 +32,8 @@ access token secret.
 You can either export those as environment variables:
 
 ```
-export TWITTER_API_KEY="your_consumer_key"
-export TWITTER_API_SECRET="your_consumer_secret"
+export TWITTER_API_KEY="your_api_key"
+export TWITTER_API_SECRET="your_api_secret"
 export TWITTER_ACCESS_TOKEN="your_access_token"
 export TWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
 ```
@@ -42,8 +42,8 @@ Or you can put them in a file `auth.json` in the current directory:
 
 ```
 {
-    "api_key": "your_consumer_key",
-    "api_secret_key": "your_consumer_secret",
+    "api_key": "your_api_key",
+    "api_secret_key": "your_api_secret",
     "access_token": "your_access_token",
     "access_token_secret": "your_access_token_secret"
 }
