@@ -62,6 +62,10 @@ def deletefavorites(days=62, dry_run=True):
         api.destroy_favorite(status.id)
 
 
+def main():
+    deletetweets(dry_run=True)
+    deletefavorites(dry_run=True)
+
+
 if __name__ == "__main__":
-    deletetweets(dry_run=False)
-    deletefavorites(dry_run=False)
+    main()
