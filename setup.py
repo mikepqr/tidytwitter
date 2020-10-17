@@ -7,12 +7,12 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
-    name="twittertidy",
-    version="0.0.1",
+    name="tidytwitter",
+    version="0.0.2",
     description="Delete your old tweets and favorites using the Twitter API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/williamsmj/twitter-tidy",
+    url="https://github.com/williamsmj/tidytwitter",
     author="Mike Lee Williams",
     author_email="mike@mike.place",
     classifiers=[
@@ -32,14 +32,14 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.6",
-    install_requires=["tweepy"],
+    install_requires=["tweepy", "click"],
     entry_points={
         "console_scripts": [
-            "twittertidy=twittertidy:main",
+            "tidytwitter=tidytwitter.tidytwitter:cli",
         ],
     },
     project_urls={
-        "Bug Reports": "https://github.com/williamsmj/twittertidy/issues",
-        "Source": "https://github.com/williamsmj/twittertidy/",
+        "Bug Reports": "https://github.com/williamsmj/tidytwitter/issues",
+        "Source": "https://github.com/williamsmj/tidytwitter",
     },
 )

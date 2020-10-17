@@ -3,9 +3,8 @@ import logging
 import os
 from datetime import datetime
 
+import click
 import tweepy
-
-logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
 def create_api():
@@ -39,9 +38,27 @@ def create_api():
     )
 
 
-def delete_tweets(api, favorite_threshold=20, days=62, dry_run=True):
+@click.group()
+@click.version_option()
+@click.option("--verbose", "-v", is_flag=True)
+@click.option("--dry-run", "-n", is_flag=True)
+@click.pass_context
+def cli(ctx, verbose, dry_run):
+    if verbose:
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+    else:
+        logging.basicConfig(level=logging.WARN, format="%(message)s")
+    ctx.obj = create_api()
+    ctx.obj.dry_run = dry_run
+
+
+@cli.command()
+@click.option("--days", "-d", default=62)
+@click.option("--favorite-threshold", "-f", default=20)
+@click.pass_context
+def tweets(ctx, days, favorite_threshold):
     n_deleted = 0
-    for status in tweepy.Cursor(api.user_timeline).items():
+    for status in tweepy.Cursor(ctx.obj.user_timeline).items():
         logging.debug(f"Examining tweet {status.id}")
 
         if (datetime.utcnow() - status.created_at).days <= days:
@@ -53,20 +70,27 @@ def delete_tweets(api, favorite_threshold=20, days=62, dry_run=True):
         if status.favorited:
             logging.info(f"Skipping tweet (self-favorited) {status.id}")
             continue
-        if dry_run:
+        if ctx.obj.dry_run:
             logging.info(f"Skipping (dry run) {status.id}")
+            n_deleted += 1
             continue
 
         logging.warning(f"Deleting tweet {status.id}")
-        api.destroy_status(status.id)
+        ctx.obj.destroy_status(status.id)
         n_deleted += 1
-    return n_deleted
+    if ctx.obj.dry_run:
+        logging.warn(f"Would have deleted {n_deleted} tweets (dry-run)")
+    else:
+        logging.warn(f"Deleted {n_deleted} tweets")
 
 
-def delete_favorites(api, days=62, dry_run=True):
-    me = api.me().id
+@cli.command()
+@click.option("--days", "-d", default=62)
+@click.pass_context
+def favorites(ctx, days):
+    me = ctx.obj.me().id
     n_deleted = 0
-    for status in tweepy.Cursor(api.favorites).items():
+    for status in tweepy.Cursor(ctx.obj.favorites).items():
         logging.debug(f"Examining {status.id}")
 
         if (datetime.utcnow() - status.created_at).days <= days:
@@ -75,19 +99,15 @@ def delete_favorites(api, days=62, dry_run=True):
         if status.user.id == me:
             logging.info(f"Skipping favorite (self-favorited) {status.id}")
             continue
-        if dry_run:
+        if ctx.obj.dry_run:
             logging.info(f"Skipping favorite (dry run) {status.id}")
+            n_deleted += 1
             continue
 
         logging.warning(f"Deleting favorite {status.id}")
-        api.destroy_favorite(status.id)
+        ctx.obj.destroy_favorite(status.id)
         n_deleted += 1
-    return n_deleted
-
-
-def main():
-    api = create_api()
-    logging.info(f"Deleting tweets and favorites for @{api.me().screen_name}")
-    n_tweets = delete_tweets(api, dry_run=False)
-    n_favorites = delete_favorites(api, dry_run=False)
-    logging.info(f"Deleted {n_tweets} tweets and {n_favorites} favorites")
+    if ctx.obj.dry_run:
+        logging.warn(f"Would have deleted {n_deleted} favorites (dry-run)")
+    else:
+        logging.warn(f"Deleted {n_deleted} favorites")
