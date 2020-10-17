@@ -14,7 +14,7 @@ will delete all of your tweets except those that:
 ```
 tidytwitter favorites
 ```
-delete all your favorites except those that:
+will delete all your favorites except those that:
 
  - are older than 62 days, or
  - are of one of your own tweets
