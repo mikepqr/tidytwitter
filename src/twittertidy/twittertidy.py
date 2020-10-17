@@ -40,6 +40,7 @@ def create_api():
 
 
 def delete_tweets(api, favorite_threshold=20, days=62, dry_run=True):
+    n_deleted = 0
     for status in tweepy.Cursor(api.user_timeline).items():
         logging.debug(f"Examining tweet {status.id}")
 
@@ -58,10 +59,13 @@ def delete_tweets(api, favorite_threshold=20, days=62, dry_run=True):
 
         logging.warning(f"Deleting tweet {status.id}")
         api.destroy_status(status.id)
+        n_deleted += 1
+    return n_deleted
 
 
 def delete_favorites(api, days=62, dry_run=True):
     me = api.me().id
+    n_deleted = 0
     for status in tweepy.Cursor(api.favorites).items():
         logging.debug(f"Examining {status.id}")
 
@@ -77,10 +81,13 @@ def delete_favorites(api, days=62, dry_run=True):
 
         logging.warning(f"Deleting favorite {status.id}")
         api.destroy_favorite(status.id)
+        n_deleted += 1
+    return n_deleted
 
 
 def main():
     api = create_api()
     logging.info(f"Deleting tweets and favorites for @{api.me().screen_name}")
-    delete_tweets(api, dry_run=True)
-    delete_favorites(api, dry_run=True)
+    n_tweets = delete_tweets(api, dry_run=False)
+    n_favorites = delete_favorites(api, dry_run=False)
+    logging.info(f"Deleted {n_tweets} tweets and {n_favorites} favorites")
