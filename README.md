@@ -7,8 +7,8 @@ tidytwitter tweets
 ```
 will delete all of your tweets except those that:
 
- - are older than 60 days, or
- - have more than 20 favorites, or
+ - are older than `--days` (default: 60), or
+ - have more than `--favorite_threshold` favorites (default:20), or
  - you have favorited yourself
 
 ```
@@ -16,7 +16,7 @@ tidytwitter favorites
 ```
 will delete all your favorites except those that:
 
- - are older than 60 days, or
+ - are older than `--days` (default: 60), or
  - are of one of your own tweets
 
 See `tidytwitter --help`, `tidytwitter tweets --help` and `tidytwitter favorites
