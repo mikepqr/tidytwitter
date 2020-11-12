@@ -89,8 +89,8 @@ def main():
 @click.pass_obj
 def tweets(api, days, favorite_threshold):
     """
-    Delete favorites older than --days unless they have more than
-    --favorite-threshold favorites
+    Delete all tweets older than --days except those that have more than
+    --favorite-threshold favorites or you have favorited yourself.
     """
     n_deleted = 0
     for status in tweepy.Cursor(api.user_timeline).items():
@@ -130,7 +130,8 @@ def tweets(api, days, favorite_threshold):
 @click.pass_obj
 def favorites(api, days):
     """
-    Delete favorites older than --days
+    Delete all favorites older than --days except those that are one of your own
+    tweets.
     """
     me = api.me().id
     n_deleted = 0
