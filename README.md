@@ -7,7 +7,7 @@ tidytwitter tweets
 ```
 will delete all of your tweets except those that:
 
- - are older than 62 days, or
+ - are older than 60 days, or
  - have more than 20 favorites, or
  - you have favorited yourself
 
@@ -16,7 +16,7 @@ tidytwitter favorites
 ```
 will delete all your favorites except those that:
 
- - are older than 62 days, or
+ - are older than 60 days, or
  - are of one of your own tweets
 
 See `tidytwitter --help`, `tidytwitter tweets --help` and `tidytwitter favorites
@@ -38,19 +38,10 @@ access token secret.
 You can either export those as environment variables:
 
 ```
-export TWITTER_API_KEY="your_api_key"
-export TWITTER_API_SECRET="your_api_secret"
-export TWITTER_ACCESS_TOKEN="your_access_token"
-export TWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
+export TIDYTWITTER_API_KEY="your_api_key"
+export TIDYTWITTER_API_SECRET="your_api_secret"
+export TIDYTWITTER_ACCESS_TOKEN="your_access_token"
+export TIDYTWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
 ```
 
-Or you can put them in a file `auth.json` in the current directory:
-
-```
-{
-    "api_key": "your_api_key",
-    "api_secret_key": "your_api_secret",
-    "access_token": "your_access_token",
-    "access_token_secret": "your_access_token_secret"
-}
-```
+or pass them as command line options (`--api-key`, etc., see `--help`).

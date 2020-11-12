@@ -8,7 +8,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="tidytwitter",
-    version="0.0.2",
+    version="0.0.3",
     description="Delete your old tweets and favorites using the Twitter API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -35,7 +35,7 @@ setup(
     install_requires=["tweepy", "click"],
     entry_points={
         "console_scripts": [
-            "tidytwitter=tidytwitter.tidytwitter:cli",
+            "tidytwitter=tidytwitter.tidytwitter:main",
         ],
     },
     project_urls={
