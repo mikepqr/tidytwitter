@@ -19,6 +19,11 @@ will delete all your favorites except those that:
  - are older than `--days` (default: 60), or
  - are of one of your own tweets
 
+```
+tidytwitter both
+```
+will delete both tweets and favorites.
+
 See `tidytwitter --help`, `tidytwitter tweets --help` and `tidytwitter favorites
 --help` for more.
 
