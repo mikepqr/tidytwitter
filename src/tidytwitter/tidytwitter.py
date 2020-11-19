@@ -50,8 +50,8 @@ def cli(
     Delete old tweets and favorites.
 
     All command line options can also be set via environment variables (prepend
-    "TIDYTWITTER" and replace '-' with '_'). For example,
-    --api-key can be set via TIDYTWITTER_API_KEY
+    "TIDYTWITTER" and replace '-' with '_'). For example, --api-key can be set
+    via TIDYTWITTER_API_KEY.
     """
     if verbose:
         logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -75,6 +75,34 @@ def main():
 @click.option(
     "--days",
     "-d",
+    help="Delete tweets and favorites older than this",
+    default=60,
+    show_default=True,
+)
+@click.option(
+    "--favorite-threshold",
+    "-f",
+    help="Do not delete tweets with more than this number of favorites",
+    default=20,
+    show_default=True,
+)
+@click.pass_obj
+def both(api, days, favorite_threshold):
+    """
+    Delete old tweets and favorites\f
+
+    Deletes tweets older than --days except those that have more than
+    --favorite-threshold favorites or you have favorited yourself.
+
+    """
+    _tweets(api, days, favorite_threshold)
+    _favorites(api, days)
+
+
+@cli.command()
+@click.option(
+    "--days",
+    "-d",
     help="Delete tweets older than this",
     default=60,
     show_default=True,
@@ -89,9 +117,18 @@ def main():
 @click.pass_obj
 def tweets(api, days, favorite_threshold):
     """
-    Delete all tweets older than --days except those that have more than
+    Delete old tweets\f
+
+    Deletes tweets older than --days except those that have more than
     --favorite-threshold favorites or you have favorited yourself.
+
+    Deletes favorites older than --days, except favorites of your own
+    tweets.
     """
+    _tweets(api, days, favorite_threshold)
+
+
+def _tweets(api, days, favorite_threshold):
     n_deleted = 0
     for status in tweepy.Cursor(api.user_timeline).items():
         logging.debug(f"Examining tweet {status.id}")
@@ -130,9 +167,15 @@ def tweets(api, days, favorite_threshold):
 @click.pass_obj
 def favorites(api, days):
     """
-    Delete all favorites older than --days except those that are one of your own
+    Delete old favorites\f
+
+    Deletes favorites older than --days, except favorites of your own
     tweets.
     """
+    _favorites(api, days)
+
+
+def _favorites(api, days):
     me = api.me().id
     n_deleted = 0
     for status in tweepy.Cursor(api.favorites).items():
