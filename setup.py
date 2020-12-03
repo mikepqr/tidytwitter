@@ -12,7 +12,7 @@ setup(
     description="Delete your old tweets and favorites using the Twitter API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/williamsmj/tidytwitter",
+    url="https://github.com/mikepqr/tidytwitter",
     author="Mike Lee Williams",
     author_email="mike@mike.place",
     classifiers=[
@@ -39,7 +39,7 @@ setup(
         ],
     },
     project_urls={
-        "Bug Reports": "https://github.com/williamsmj/tidytwitter/issues",
-        "Source": "https://github.com/williamsmj/tidytwitter",
+        "Bug Reports": "https://github.com/mikepqr/tidytwitter/issues",
+        "Source": "https://github.com/mikepqr/tidytwitter",
     },
 )
