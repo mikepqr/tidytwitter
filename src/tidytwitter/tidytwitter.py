@@ -129,8 +129,10 @@ def tweets(api, days, favorite_threshold):
 
 
 def _tweets(api, days, favorite_threshold):
+    n_tweets = 0
     n_deleted = 0
     for status in tweepy.Cursor(api.user_timeline).items():
+        n_tweets += 1
         logging.debug(f"Examining tweet {status.id}")
 
         if (datetime.utcnow() - status.created_at).days <= days:
@@ -151,9 +153,9 @@ def _tweets(api, days, favorite_threshold):
         n_deleted += 1
 
     if api.dry_run:
-        logging.warn(f"Would have deleted {n_deleted} tweets (dry-run)")
+        logging.warn(f"Would have deleted {n_deleted}/{n_tweets} tweets (dry-run)")
     else:
-        logging.warn(f"Deleted {n_deleted} tweets")
+        logging.warn(f"Deleted {n_deleted}/{n_tweets} tweets")
 
 
 @cli.command()
@@ -178,7 +180,9 @@ def favorites(api, days):
 def _favorites(api, days):
     me = api.me().id
     n_deleted = 0
+    n_favorites = 0
     for status in tweepy.Cursor(api.favorites).items():
+        n_favorites += 1
         logging.debug(f"Examining {status.id}")
         if (datetime.utcnow() - status.created_at).days <= days:
             logging.info(f"Skipping favorite (recent) {status.id}")
@@ -195,6 +199,6 @@ def _favorites(api, days):
         n_deleted += 1
 
     if api.dry_run:
-        logging.warn(f"Would have deleted {n_deleted} favorites (dry-run)")
+        logging.warn(f"Would have deleted {n_deleted}/{n_favorites} favorites (dry-run)")
     else:
-        logging.warn(f"Deleted {n_deleted} favorites")
+        logging.warn(f"Deleted {n_deleted}/{n_favorites} favorites")
