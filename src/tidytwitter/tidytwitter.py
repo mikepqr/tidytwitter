@@ -5,6 +5,10 @@ import click
 import tweepy
 
 
+def tweet_url(status):
+    return f"https://twitter.com/{status.user.screen_name}/status/{status.id}"
+
+
 def create_api(auth_data):
     auth = tweepy.OAuthHandler(auth_data["api_key"], auth_data["api_secret"])
     auth.set_access_token(auth_data["access_token"], auth_data["access_token_secret"])
@@ -136,16 +140,16 @@ def _tweets(api, days, favorite_threshold):
         logging.debug(f"Examining tweet {status.id}")
 
         if (datetime.utcnow() - status.created_at).days <= days:
-            logging.info(f"Skipping tweet (recent) {status.id}")
+            logging.info(f"Skipping tweet (recent) {tweet_url(status)}")
             continue
         if status.favorite_count > favorite_threshold:
-            logging.info(f"Skipping tweet (lots of favorites) {status.id}")
+            logging.info(f"Skipping tweet (lots of favorites) {tweet_url(status)}")
             continue
         if status.favorited:
-            logging.info(f"Skipping tweet (self-favorited) {status.id}")
+            logging.info(f"Skipping tweet (self-favorited) {tweet_url(status)}")
             continue
         if api.dry_run:
-            logging.info(f"Skipping (dry run) {status.id}")
+            logging.info(f"Skipping (dry run) {tweet_url(status)}")
             n_deleted += 1
             continue
         logging.warning(f"Deleting tweet {status.id}")
@@ -185,13 +189,13 @@ def _favorites(api, days):
         n_favorites += 1
         logging.debug(f"Examining {status.id}")
         if (datetime.utcnow() - status.created_at).days <= days:
-            logging.info(f"Skipping favorite (recent) {status.id}")
+            logging.info(f"Skipping favorite (recent) {tweet_url(status)}")
             continue
         if status.user.id == me:
-            logging.info(f"Skipping favorite (self-favorited) {status.id}")
+            logging.info(f"Skipping favorite (self-favorited) {tweet_url(status)}")
             continue
         if api.dry_run:
-            logging.info(f"Skipping favorite (dry run) {status.id}")
+            logging.info(f"Skipping favorite (dry run) {tweet_url(status)}")
             n_deleted += 1
             continue
         logging.warning(f"Deleting favorite {status.id}")
@@ -199,6 +203,8 @@ def _favorites(api, days):
         n_deleted += 1
 
     if api.dry_run:
-        logging.warn(f"Would have deleted {n_deleted}/{n_favorites} favorites (dry-run)")
+        logging.warn(
+            f"Would have deleted {n_deleted}/{n_favorites} favorites (dry-run)"
+        )
     else:
         logging.warn(f"Deleted {n_deleted}/{n_favorites} favorites")
