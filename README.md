@@ -34,11 +34,12 @@ Albon](https://gist.github.com/chrisalbon/b9bd4a6309c9f5f5eeab41377f27a670).
 ## Installation
 
 ```
-pip install git+https://github.com/mikepqr/tidytwitter.git
+pip install tidytwitter
 ```
 
-Create a Twitter developer account and get the key, secret, access token and
-access token secret.
+Create a new project in your [Twitter developer
+account](https://developer.twitter.com/apps) and get the key, secret, access
+token and access token secret.
 
 You can either export those as environment variables:
 
