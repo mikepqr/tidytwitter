@@ -95,9 +95,7 @@ def both(api, days, favorite_threshold):
     """
     Delete old tweets and favorites\f
 
-    Deletes tweets older than --days except those that have more than
-    --favorite-threshold favorites or you have favorited yourself.
-
+    Equivalent to running `tidytwitter tweets` and `tidytwitter favorites`
     """
     _tweets(api, days, favorite_threshold)
     _favorites(api, days)
@@ -125,9 +123,6 @@ def tweets(api, days, favorite_threshold):
 
     Deletes tweets older than --days except those that have more than
     --favorite-threshold favorites or you have favorited yourself.
-
-    Deletes favorites older than --days, except favorites of your own
-    tweets.
     """
     _tweets(api, days, favorite_threshold)
 

@@ -5,24 +5,21 @@ Delete your old tweets and favorites using the Twitter API.
 ```
 tidytwitter tweets
 ```
-will delete all of your tweets except those that:
 
- - are older than `--days` (default: 60), or
- - have more than `--favorite_threshold` favorites (default:20), or
- - you have favorited yourself
+deletes all of your tweets that are older than --days (default: 60) except
+those that you have favorited yourself or have more than --favorite-threshold
+favorites (default: 20).
 
 ```
 tidytwitter favorites
 ```
-will delete all your favorites except those that:
-
- - are older than `--days` (default: 60), or
- - are of one of your own tweets
+deletes all of your favorties that are older than --days (default: 60)
+except those that are of your own tweets.
 
 ```
 tidytwitter both
 ```
-will delete both tweets and favorites.
+deletes both tweets and favorites.
 
 See `tidytwitter --help`, `tidytwitter tweets --help` and `tidytwitter favorites
 --help` for more.
