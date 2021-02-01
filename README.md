@@ -48,3 +48,7 @@ export TIDYTWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
 ```
 
 or pass them as command line options (`--api-key`, etc., see `--help`).
+
+## Automation with Github
+
+See [tidytwitter-cron](https://github.com/mikepqr/tidytwitter-cron).
