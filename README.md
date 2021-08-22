@@ -49,6 +49,17 @@ export TIDYTWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
 
 or pass them as command line options (`--api-key`, etc., see `--help`).
 
+### Shell completion
+
+You can optionally enable shell completion by running the appropriate command
+for your shell:
+
+```bash
+eval "$(_TIDYTWITTER_COMPLETE=bash_source tidytwitter)" >> ~/.bashrc # bash
+eval "$(_TIDYTWITTER_COMPLETE=zsh_source tidytwitter)" >> ~/.zshrc  # zsh
+_TIDYTWITTER_COMPLETE=fish_source foo-bar > ~/.config/fish/completions/tidytwitter.fish  # fish
+```
+
 ## Automation with Github
 
 See [tidytwitter-cron](https://github.com/mikepqr/tidytwitter-cron).
