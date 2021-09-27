@@ -18,7 +18,7 @@ def create_api(auth_data):
         wait_on_rate_limit_notify=True,
         retry_count=3,
         retry_delay=5,
-        retry_errors=set([401, 404, 500, 503]),
+        retry_errors={401, 404, 500, 503},
     )
 
 
