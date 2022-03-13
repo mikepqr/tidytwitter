@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 import click
 import tweepy
@@ -15,7 +15,6 @@ def create_api(auth_data):
     return tweepy.API(
         auth,
         wait_on_rate_limit=True,
-        wait_on_rate_limit_notify=True,
         retry_count=3,
         retry_delay=5,
         retry_errors={401, 404, 500, 503},
@@ -133,8 +132,10 @@ def _tweets(api, days, favorite_threshold):
     for status in tweepy.Cursor(api.user_timeline).items():
         n_tweets += 1
         logging.debug(f"Examining tweet {status.id}")
-
-        if (datetime.utcnow() - status.created_at).days <= days:
+        # The API returns status.created_at in UTC, but the dt returned by
+        # tweepy is not aware in tweepy<4.0.0
+        created_at = status.created_at.replace(tzinfo=timezone.utc)
+        if (datetime.now(tz=timezone.utc) - created_at).days <= days:
             logging.info(f"Skipping tweet (recent) {tweet_url(status)}")
             continue
         if status.favorite_count > favorite_threshold:
@@ -177,13 +178,14 @@ def favorites(api, days):
 
 
 def _favorites(api, days):
-    me = api.me().id
+    me = api.verify_credentials().id
     n_deleted = 0
     n_favorites = 0
-    for status in tweepy.Cursor(api.favorites).items():
+    for status in tweepy.Cursor(api.get_favorites).items():
         n_favorites += 1
         logging.debug(f"Examining {status.id}")
-        if (datetime.utcnow() - status.created_at).days <= days:
+        created_at = status.created_at.replace(tzinfo=timezone.utc)
+        if (datetime.now(tz=timezone.utc) - created_at).days <= days:
             logging.info(f"Skipping favorite (recent) {tweet_url(status)}")
             continue
         if status.user.id == me:
